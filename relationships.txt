@@ -1,0 +1,48 @@
+
+
+migration
+
+
+//model scenario : Each user must belong to an institution.
+//we can therefore model a one to many relationship
+
+//user belongs to institution
+//institution has many users
+
+
+//columns for your parent table (institution)
+Schema::create('institutions', function (Blueprint $table) {
+        $table->increments('id');
+        $table->string('name');
+        $table->timestamps();
+    });
+}
+
+//model for your parent table
+//add the following function
+    public function user(){
+        //one to many
+        return $this->hasMany(User::class);
+    }
+
+
+
+//users table - child table
+Schema::create('users', function (Blueprint $table) {
+    $table->increments('id');
+    $table->string('name');
+    $table->string('email')->unique();
+    $table->integer('institution_id')->references('id')->on('institutions');
+    $table->rememberToken();
+    $table->timestamps();
+});
+
+
+//model for your user table
+ public function institution(){
+        //one to many
+        return $this->belongsTo(Institution::class);
+  }
+
+
+
